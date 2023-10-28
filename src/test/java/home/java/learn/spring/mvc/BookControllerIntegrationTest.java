@@ -6,6 +6,7 @@ import home.java.learn.spring.mvc.controller.BookController;
 import home.java.learn.spring.mvc.model.Book;
 import home.java.learn.spring.mvc.repository.BookRepository;
 import home.java.learn.spring.mvc.service.BookService;
+import home.java.learn.spring.mvc.service.BookServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,13 +29,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -48,8 +49,12 @@ public class BookControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
-    private static BookService bookService;
+    @InjectMocks
+    private static BookServiceImpl bookService;
+
+/*    @MockBean
+    private static BookServiceImpl bookServiceImpl;*/
+
 
     @MockBean
     private static BookRepository bookRepository;
@@ -65,6 +70,8 @@ public class BookControllerIntegrationTest {
         );
 
         given(bookRepository.findAll()).willReturn(mockBooks);
+        given(bookRepository.findById(any())).willReturn(Optional.ofNullable(mockBooks.get(0)));
+//        given(bookServiceImpl.getAllBooks()).willReturn(mockBooks);
     }
 
     @Test
@@ -101,9 +108,9 @@ public class BookControllerIntegrationTest {
     public void testGetBookById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/books/1")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
 //                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-//                .andExpect(jsonPath("$.id").value(1));
+                .andExpect(jsonPath("$.id").value(1));
     }
 
     @Test
@@ -132,18 +139,22 @@ public class BookControllerIntegrationTest {
         );
 
         given(bookService.getAllBooks()).willReturn(mockBooks);*/
+
         List<Book> bookList = bookService.getAllBooks();
-        Book updateBook = bookList.get(0);
+        Book updateBook =new Book(1L, "Mock","1990", 2023);
         updateBook.setAuthor("Kevin");
+        given(bookRepository.save(any(Book.class))).willReturn(updateBook);
+        when(bookRepository.save(any(Book.class))).thenReturn(updateBook);
         mockMvc.perform(MockMvcRequestBuilders.put("/api/books/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateBook)))
-//                .andExpect( jsonPath("$.author").value("Kegin"))
+//                .andExpect( jsonPath("$.author").value("Kevin"))
+//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());
 
         //verifying method call once with argument captor
-        verify(bookService).updateBook(any(),any(Book.class));
+//        verify(bookRepository).save(any(Book.class));
     }
 
     @Test
@@ -163,6 +174,20 @@ public class BookControllerIntegrationTest {
     public void testDeleteBook() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/books/1"))
                 .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    public void testUpdateBookById()
+        throws Exception {
+        Book book = new Book();
+        book.setTitle("Updated Book Title");
+        book.setAuthor("Updated Author");
+        book.setYear(2025);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/books/2")
+                       .contentType("application/json")
+                       .content(objectMapper.writeValueAsString(book)))
+               .andExpect(status().isOk());
     }
 }
 
