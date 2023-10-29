@@ -1,8 +1,11 @@
 package home.java.learn.spring.mvc.controller;
 
+import home.java.learn.spring.mvc.custom.exception.NotFoundException;
 import home.java.learn.spring.mvc.model.Book;
 import home.java.learn.spring.mvc.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,9 +22,13 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Book getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id);
-    }
+    public ResponseEntity getBookById(@PathVariable Long id) throws NotFoundException {
+        Book bookById = bookService.getBookById(id);
+        if(bookById != null && bookById.getAuthor() != null)
+            return ResponseEntity.ok(bookById);
+        return ResponseEntity.status(HttpStatusCode.valueOf(404)).body("Requested book is not found");
+        }
+
 
     @PostMapping
     public Book createBook(@RequestBody Book book) {
