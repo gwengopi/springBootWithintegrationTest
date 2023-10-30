@@ -26,7 +26,10 @@ public class BookController {
         Book bookById = bookService.getBookById(id);
         if(bookById != null && bookById.getAuthor() != null)
             return ResponseEntity.ok(bookById);
-        return ResponseEntity.status(HttpStatusCode.valueOf(404)).body("Requested book is not found");
+        else {
+            throw new NotFoundException("Requested book is not found");
+        }
+//        return ResponseEntity.status(HttpStatusCode.valueOf(404)).body("Requested book is not found");
         }
 
 
