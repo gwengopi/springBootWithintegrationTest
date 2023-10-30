@@ -1,7 +1,15 @@
 package home.java.learn.spring.mvc.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "book")
 public class Book {
@@ -12,15 +20,6 @@ public class Book {
     private String author;
     private int year;
 
-    public Book(Long id, String title, String author, int year) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.year = year;
-    }
-
-    public Book() {
-    }
     // Getters and setters
 
 
