@@ -1,20 +1,29 @@
 package home.java.learn.spring.mvc.service;
 
+import home.java.learn.spring.mvc.mapper.BookMapper;
 import home.java.learn.spring.mvc.model.Book;
 import home.java.learn.spring.mvc.repository.BookRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import home.java.learn.spring.mvc.dto.BookDTO;
 
 @Service
+@AllArgsConstructor
 public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private BookMapper bookMapper;
+
     @Override
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public List<BookDTO> getAllBooks() {
+        return bookRepository.findAll().stream()
+                .map(bookMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -24,6 +33,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book createBook(Book book) {
+
         return bookRepository.save(book);
     }
 

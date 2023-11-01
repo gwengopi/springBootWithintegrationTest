@@ -1,5 +1,6 @@
 package home.java.learn.spring.mvc.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +12,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BookDTO {
 
+    @JsonIgnore
     private Long id;
-    private String title;
-    private String author;
-    private int year;
+    private String bookTitle;
+    private String bookAuthor;
+    private int publishedYear;
 }

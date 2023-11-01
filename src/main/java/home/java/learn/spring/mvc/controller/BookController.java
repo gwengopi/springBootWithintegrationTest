@@ -1,10 +1,10 @@
 package home.java.learn.spring.mvc.controller;
 
 import home.java.learn.spring.mvc.custom.exception.NotFoundException;
+import home.java.learn.spring.mvc.dto.BookDTO;
 import home.java.learn.spring.mvc.model.Book;
 import home.java.learn.spring.mvc.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,7 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public List<Book> getAllBooks() {
+    public List<BookDTO> getAllBooks() {
         return bookService.getAllBooks();
     }
 
