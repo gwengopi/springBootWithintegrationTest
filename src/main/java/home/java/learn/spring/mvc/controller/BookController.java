@@ -5,7 +5,10 @@ import home.java.learn.spring.mvc.dto.BookDTO;
 import home.java.learn.spring.mvc.model.Book;
 import home.java.learn.spring.mvc.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,8 +37,9 @@ public class BookController {
 
 
     @PostMapping
-    public Book createBook(@RequestBody Book book) {
-        return bookService.createBook(book);
+    public ResponseEntity createBook(@RequestBody @Validated BookDTO book) {
+        bookService.createBook(book);
+        return ResponseEntity.status(HttpStatusCode.valueOf(200)).body("Book created successfully");
     }
 
     @PutMapping("/{id}")
