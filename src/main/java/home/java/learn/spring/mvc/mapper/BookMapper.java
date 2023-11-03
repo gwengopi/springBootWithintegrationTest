@@ -4,10 +4,11 @@ import home.java.learn.spring.mvc.dto.BookDTO;
 import home.java.learn.spring.mvc.model.Book;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface BookMapper {
 
     BookMapper MAPPER = Mappers.getMapper(BookMapper.class);
