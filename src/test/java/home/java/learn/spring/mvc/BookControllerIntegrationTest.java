@@ -1,29 +1,23 @@
 package home.java.learn.spring.mvc;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import home.java.learn.spring.mvc.controller.BookController;
+import home.java.learn.spring.mvc.dto.BookDTO;
 import home.java.learn.spring.mvc.model.Book;
 import home.java.learn.spring.mvc.repository.BookRepository;
-import home.java.learn.spring.mvc.service.BookService;
 import home.java.learn.spring.mvc.service.BookServiceImpl;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 //import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -140,7 +134,7 @@ public class BookControllerIntegrationTest {
 
         given(bookService.getAllBooks()).willReturn(mockBooks);*/
 
-        List<Book> bookList = bookService.getAllBooks();
+        List<BookDTO> bookList = bookService.getAllBooks();
         Book updateBook =new Book(1L, "Mock","1990", 2023);
         updateBook.setAuthor("Kevin");
         given(bookRepository.save(any(Book.class))).willReturn(updateBook);
