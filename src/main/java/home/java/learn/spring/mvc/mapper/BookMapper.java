@@ -17,6 +17,10 @@ public interface BookMapper {
     @Mapping(source = "author", target = "bookAuthor")
     @Mapping(source = "year", target = "publishedYear")
     BookDTO toDTO(Book book);
+
+    @Mapping(source = "bookTitle", target = "title")
+    @Mapping(source = "bookAuthor", target = "author")
+    @Mapping(source = "publishedYear", target = "year")
     Book toEntity(home.java.learn.spring.mvc.dto.BookDTO bookDTO);
 
 }
