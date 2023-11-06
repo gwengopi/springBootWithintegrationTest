@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,8 +60,8 @@ public class BookControllerIntegrationTest {
     @BeforeEach
     void beforeAll() {
         List<Book> mockBooks = Arrays.asList(
-                new Book(1L, "Mock Book 1", "Mock Author 1", 2023),
-                new Book(2L, "Mock Book 2", "Mock Author 2", 2024)
+                new Book(1L, "Mock Book 1", "Mock Author 1", 2023,new Date(), null),
+                new Book(2L, "Mock Book 2", "Mock Author 2", 2024,new Date(),null)
         );
 
         given(bookRepository.findAll()).willReturn(mockBooks);
@@ -135,7 +136,7 @@ public class BookControllerIntegrationTest {
         given(bookService.getAllBooks()).willReturn(mockBooks);*/
 
         List<BookDTO> bookList = bookService.getAllBooks();
-        Book updateBook =new Book(1L, "Mock","1990", 2023);
+        Book updateBook =new Book(1L, "Mock","1990", 2023,new Date(),null);
         updateBook.setAuthor("Kevin");
         given(bookRepository.save(any(Book.class))).willReturn(updateBook);
         when(bookRepository.save(any(Book.class))).thenReturn(updateBook);
