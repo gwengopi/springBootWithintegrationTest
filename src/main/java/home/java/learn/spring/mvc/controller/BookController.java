@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -50,5 +52,12 @@ public class BookController {
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadBooks(@RequestParam("file") MultipartFile file) throws IOException {
+
+        bookService.uploadBook(file);
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully uploaded and processed books.");
     }
 }
