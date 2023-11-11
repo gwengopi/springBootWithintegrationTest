@@ -5,6 +5,8 @@ import home.java.learn.spring.mvc.model.Book;
 import home.java.learn.spring.mvc.repository.BookRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
 import home.java.learn.spring.mvc.dto.BookDTO;
+import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -83,5 +86,16 @@ public class BookServiceImpl implements BookService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No valid books found in the uploaded file.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(books);
+    }
+
+    @Override
+    public List<BookDTO> getAllBooksByParameters(String bookTitle, String bookAuthor, Integer pageNumber, Integer pageSize) {
+        Assert.notNull(pageNumber, "PageNumber must not be null");
+        Assert.notNull(pageSize, "pageSize must not be null");
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+//        Assert.assertNotEmpty(pageRequest);
+        Page<Book> allBooksByPage = bookRepository.findAll(pageRequest);
+        List<BookDTO> collectedBook = allBooksByPage.getContent().stream().map(bookMapper::toDTO).collect(Collectors.toList());
+        return collectedBook;
     }
 }

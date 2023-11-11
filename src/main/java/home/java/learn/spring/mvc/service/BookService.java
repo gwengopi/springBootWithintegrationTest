@@ -16,5 +16,7 @@ public interface BookService {
     void deleteBook(Long id);
 
     ResponseEntity uploadBook(MultipartFile file) throws IOException;
+
+    List<BookDTO> getAllBooksByParameters(String bookTitle, String bookAuthor, Integer pageNumber, Integer pageSize);
 }
 

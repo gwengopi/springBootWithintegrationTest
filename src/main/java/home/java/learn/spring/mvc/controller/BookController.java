@@ -26,6 +26,16 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
+    @GetMapping(value = "getAllBooksByParameters")
+    public List<BookDTO> getAllBooksByParmeters
+            (@RequestParam(value = "bookTitle",required = false) String bookTitle,
+            @RequestParam(value = "bookAuthor",required = false) String bookAuthor,
+             @RequestParam(value = "pageNumber",required = false)Integer pageNumber,
+             @RequestParam(value = "pageSize",required = false)Integer pageSize)
+    {
+        return bookService.getAllBooksByParameters(bookTitle,bookAuthor,pageNumber,pageSize);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity getBookById(@PathVariable Long id) throws NotFoundException {
         Book bookById = bookService.getBookById(id);
